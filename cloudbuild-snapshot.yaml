@@ -26,14 +26,14 @@ steps:
       - -ceu
       - |
         BASE_VERSION="$(tr -d '\r\n' < version.txt)"
-        BASE_VERSION="$(echo "${BASE_VERSION}" | sed -E 's/-SNAPSHOT$//; s/-rc\.[0-9]+$//')"
+        BASE_VERSION="$(echo "$${BASE_VERSION}" | sed -E 's/-SNAPSHOT$//; s/-rc\.[0-9]+$//')"
 
-        BRANCH_SAFE="$(echo "${BRANCH_NAME:-feature}" | tr '[:upper:]' '[:lower:]' | sed -E 's#[^a-z0-9]+#-#g; s#^-+##; s#-+$##' | cut -c1-20)"
-        SHORT_SHA_SAFE="${SHORT_SHA:-local}"
-        EFFECTIVE_VERSION="${BASE_VERSION}-${BRANCH_SAFE}-${SHORT_SHA_SAFE}-SNAPSHOT"
+        BRANCH_SAFE="$(echo "$${BRANCH_NAME:-feature}" | tr '[:upper:]' '[:lower:]' | sed -E 's#[^a-z0-9]+#-#g; s#^-+##; s#-+$##' | cut -c1-20)"
+        SHORT_SHA_SAFE="$${SHORT_SHA:-local}"
+        EFFECTIVE_VERSION="$${BASE_VERSION}-$${BRANCH_SAFE}-$${SHORT_SHA_SAFE}-SNAPSHOT"
 
-        echo "${EFFECTIVE_VERSION}" > /workspace/effective-version.txt
-        mvn -B -ntp versions:set -DnewVersion="${EFFECTIVE_VERSION}" -DgenerateBackupPoms=false
+        echo "$${EFFECTIVE_VERSION}" > /workspace/effective-version.txt
+        mvn -B -ntp versions:set -DnewVersion="$${EFFECTIVE_VERSION}" -DgenerateBackupPoms=false
         mvn -B -ntp -s /workspace/settings.xml versions:commit
 
   - name: maven:3.9.9-eclipse-temurin-21
@@ -60,7 +60,7 @@ steps:
       - -ceu
       - |
         VERSION="$(cat /workspace/effective-version.txt)"
-        echo "Published: uk.gov.ons.census.fwmt:census31-fwmt-common:${VERSION}"
+        echo "Published: uk.gov.ons.census.fwmt:census31-fwmt-common:$${VERSION}"
         echo "Repository: ${_REPO_SUFFIX}"
 
 substitutions:
