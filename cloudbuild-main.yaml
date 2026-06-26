@@ -62,7 +62,7 @@ steps:
       - -ceu
       - |
         VERSION="$(cat /workspace/effective-version.txt)"
-        echo "Published: uk.gov.ons.census.fwmt:census31-fwmt-common:${VERSION}"
+        echo "Published : uk.gov.ons.census.fwmt:census31-fwmt-common:${VERSION}"
         echo "Repository: ${_REPO_SUFFIX}"
 
 substitutions:
