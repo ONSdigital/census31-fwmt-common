@@ -17,7 +17,7 @@ steps:
           echo '  </servers>'
           echo '</settings>'
         } > /workspace/settings.xml
-        sed -i "s/TOKEN_PLACEHOLDER/${TOKEN}/" /workspace/settings.xml
+        sed -i "s/TOKEN_PLACEHOLDER/$${TOKEN}/" /workspace/settings.xml
 
   - name: maven:3.9.9-eclipse-temurin-21
     id: Compute Snapshot Version
