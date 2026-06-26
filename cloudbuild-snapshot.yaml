@@ -6,17 +6,17 @@ steps:
       - -ceu
       - |
         TOKEN="$(gcloud auth print-access-token)"
-        cat > /workspace/settings.xml <<'EOF'
-<settings>
-  <servers>
-    <server>
-      <id>artifact-registry</id>
-      <username>oauth2accesstoken</username>
-      <password>TOKEN_PLACEHOLDER</password>
-    </server>
-  </servers>
-</settings>
-EOF
+        {
+          echo '<settings>'
+          echo '  <servers>'
+          echo '    <server>'
+          echo '      <id>artifact-registry</id>'
+          echo '      <username>oauth2accesstoken</username>'
+          echo '      <password>TOKEN_PLACEHOLDER</password>'
+          echo '    </server>'
+          echo '  </servers>'
+          echo '</settings>'
+        } > /workspace/settings.xml
         sed -i "s/TOKEN_PLACEHOLDER/${TOKEN}/" /workspace/settings.xml
 
   - name: maven:3.9.9-eclipse-temurin-21
