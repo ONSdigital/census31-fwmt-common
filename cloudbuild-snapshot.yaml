@@ -6,18 +6,17 @@ steps:
       - -ceu
       - |
         TOKEN="$(gcloud auth print-access-token)"
-        {
-          echo '<settings>'
-          echo '  <servers>'
-          echo '    <server>'
-          echo '      <id>artifact-registry</id>'
-          echo '      <username>oauth2accesstoken</username>'
-          echo '      <password>TOKEN_PLACEHOLDER</password>'
-          echo '    </server>'
-          echo '  </servers>'
-          echo '</settings>'
-        } > /workspace/settings.xml
-        sed -i "s/TOKEN_PLACEHOLDER/$${TOKEN}/" /workspace/settings.xml
+        cat > /workspace/settings.xml <<EOF
+        <settings>
+          <servers>
+            <server>
+              <id>artifact-registry</id>
+              <username>oauth2accesstoken</username>
+              <password>$${TOKEN}</password>
+            </server>
+          </servers>
+        </settings>
+        EOF
 
   - name: maven:3.9.9-eclipse-temurin-21
     id: Compute Snapshot Version
@@ -51,7 +50,7 @@ steps:
       - -ceu
       - |
         mvn -B -ntp -s /workspace/settings.xml deploy -DskipTests \
-          -DaltDeploymentRepository=artifact-registry::default::https://${_REGION}-maven.pkg.dev/${PROJECT_ID}/${_REPO_SUFFIX}
+          -DaltDeploymentRepository=artifact-registry::https://${_REGION}-maven.pkg.dev/${PROJECT_ID}/${_REPO_SUFFIX}
 
   - name: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
     id: Log Published Coordinates
