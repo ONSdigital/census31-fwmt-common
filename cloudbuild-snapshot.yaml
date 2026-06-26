@@ -6,7 +6,6 @@ steps:
       - -ceu
       - |
         TOKEN="$(gcloud auth print-access-token)"
-
         cat > /workspace/settings.xml <<'EOF'
 <settings>
   <servers>
