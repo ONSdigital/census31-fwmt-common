@@ -12,7 +12,7 @@ steps:
             <server>
               <id>artifact-registry</id>
               <username>oauth2accesstoken</username>
-              <password>${TOKEN}</password>
+              <password>\${TOKEN}</password>
             </server>
           </servers>
         </settings>
