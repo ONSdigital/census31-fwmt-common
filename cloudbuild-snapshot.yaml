@@ -18,7 +18,6 @@ steps:
   </servers>
 </settings>
 EOF
-
         sed -i "s/TOKEN_PLACEHOLDER/${TOKEN}/" /workspace/settings.xml
 
   - name: maven:3.9.9-eclipse-temurin-21
