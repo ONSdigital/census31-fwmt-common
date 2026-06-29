@@ -80,7 +80,7 @@ steps:
         </settings>
         EOF
 
-  - name: maven:3.9.9-eclipse-temurin-21
+  - name: maven:3.9.9-eclipse-temurin-25
     id: Compute Snapshot Version
     entrypoint: bash
     args:
@@ -105,7 +105,7 @@ steps:
 
         echo "$${EFFECTIVE_VERSION}" > /workspace/effective-version.txt
 
-  - name: maven:3.9.9-eclipse-temurin-21
+  - name: maven:3.9.9-eclipse-temurin-25
     id: Test
     entrypoint: bash
     args:
@@ -114,7 +114,7 @@ steps:
         EFFECTIVE_VERSION="$(cat /workspace/effective-version.txt)"
         mvn -B -ntp -s /workspace/settings.xml -Drevision="$${EFFECTIVE_VERSION}" clean verify
 
-  - name: maven:3.9.9-eclipse-temurin-21
+  - name: maven:3.9.9-eclipse-temurin-25
     id: Publish Snapshot
     entrypoint: bash
     args:
