@@ -80,7 +80,7 @@ steps:
         </settings>
         EOF
 
-  - name: maven:3.9.9-eclipse-temurin-25
+  - name: maven:3.9.16-eclipse-temurin-25
     id: Compute Main RC Version
     entrypoint: bash
     args:
@@ -107,7 +107,7 @@ steps:
         EFFECTIVE_VERSION="${BASE_VERSION}-rc.${RC_NUMBER}"
         echo "${EFFECTIVE_VERSION}" > /workspace/effective-version.txt
 
-  - name: maven:3.9.9-eclipse-temurin-25
+  - name: maven:3.9.16-eclipse-temurin-25
     id: Test
     entrypoint: bash
     args:
@@ -116,7 +116,7 @@ steps:
         EFFECTIVE_VERSION="$(cat /workspace/effective-version.txt)"
         mvn -B -ntp -s /workspace/settings.xml -Drevision="${EFFECTIVE_VERSION}" clean verify
 
-  - name: maven:3.9.9-eclipse-temurin-25
+  - name: maven:3.9.16-eclipse-temurin-25
     id: Publish Release Candidate
     entrypoint: bash
     args:
