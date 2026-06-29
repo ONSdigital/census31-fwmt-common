@@ -24,7 +24,17 @@ steps:
     args:
       - -ceu
       - |
-        BASE_VERSION="$(mvn -B -ntp -s /workspace/settings.xml help:evaluate -Dexpression=project.version -q -DforceStdout)"
+        if [[ ! -f version.txt ]]; then
+          echo "ERROR: version.txt not found" >&2
+          exit 1
+        fi
+
+        BASE_VERSION="$(tr -d '\r\n' < version.txt)"
+        if [[ -z "$${BASE_VERSION}" ]]; then
+          echo "ERROR: version.txt is empty" >&2
+          exit 1
+        fi
+
         BASE_VERSION="$(echo "$${BASE_VERSION}" | sed -E 's/-SNAPSHOT$//; s/-rc\.[0-9]+$//')"
 
         BRANCH_SAFE="$(echo "$${BRANCH_NAME:-feature}" | tr '[:upper:]' '[:lower:]' | sed -E 's#[^a-z0-9]+#-#g; s#^-+##; s#-+$##' | cut -c1-20)"
@@ -32,8 +42,6 @@ steps:
         EFFECTIVE_VERSION="$${BASE_VERSION}-$${BRANCH_SAFE}-$${SHORT_SHA_SAFE}-SNAPSHOT"
 
         echo "$${EFFECTIVE_VERSION}" > /workspace/effective-version.txt
-        mvn -B -ntp versions:set -DnewVersion="$${EFFECTIVE_VERSION}" -DgenerateBackupPoms=false
-        mvn -B -ntp -s /workspace/settings.xml versions:commit
 
   - name: maven:3.9.9-eclipse-temurin-21
     id: Test
@@ -41,7 +49,8 @@ steps:
     args:
       - -ceu
       - |
-        mvn -B -ntp -s /workspace/settings.xml clean verify
+        EFFECTIVE_VERSION="$(cat /workspace/effective-version.txt)"
+        mvn -B -ntp -s /workspace/settings.xml -Drevision="$${EFFECTIVE_VERSION}" clean verify
 
   - name: maven:3.9.9-eclipse-temurin-21
     id: Publish Snapshot
@@ -49,7 +58,9 @@ steps:
     args:
       - -ceu
       - |
+        EFFECTIVE_VERSION="$(cat /workspace/effective-version.txt)"
         mvn -B -ntp -s /workspace/settings.xml deploy -DskipTests \
+          -Drevision="$${EFFECTIVE_VERSION}" \
           -DaltDeploymentRepository=artifact-registry::https://${_REGION}-maven.pkg.dev/${PROJECT_ID}/${_REPO_SUFFIX}
 
   - name: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim

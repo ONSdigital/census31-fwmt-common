@@ -12,8 +12,13 @@
   </parent>
 
   <artifactId>census31-fwmt-common</artifactId>
+  <version>${revision}</version>
   <packaging>jar</packaging>
   <name>census31-fwmt-common</name>
+
+  <properties>
+    <revision>27.0.0</revision>
+  </properties>
 
   <dependencies>
     <dependency>

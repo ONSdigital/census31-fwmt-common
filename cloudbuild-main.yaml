@@ -12,7 +12,7 @@ steps:
             <server>
               <id>artifact-registry</id>
               <username>oauth2accesstoken</username>
-              <password>${TOKEN}</password>
+              <password>$${TOKEN}</password>
             </server>
           </servers>
         </settings>
@@ -24,7 +24,17 @@ steps:
     args:
       - -ceu
       - |
+        if [[ ! -f version.txt ]]; then
+          echo "ERROR: version.txt not found" >&2
+          exit 1
+        fi
+
         BASE_VERSION="$(tr -d '\r\n' < version.txt)"
+        if [[ -z "${BASE_VERSION}" ]]; then
+          echo "ERROR: version.txt is empty" >&2
+          exit 1
+        fi
+
         BASE_VERSION="$(echo "${BASE_VERSION}" | sed -E 's/-SNAPSHOT$//; s/-rc\.[0-9]+$//')"
 
         RC_NUMBER="$(echo "${BUILD_ID:-1}" | tr -cd '0-9' | cut -c1-6)"
@@ -35,16 +45,14 @@ steps:
         EFFECTIVE_VERSION="${BASE_VERSION}-rc.${RC_NUMBER}"
         echo "${EFFECTIVE_VERSION}" > /workspace/effective-version.txt
 
-        mvn -B -ntp versions:set -DnewVersion="${EFFECTIVE_VERSION}" -DgenerateBackupPoms=false
-        mvn -B -ntp -s /workspace/settings.xml versions:commit
-
   - name: maven:3.9.9-eclipse-temurin-21
     id: Test
     entrypoint: bash
     args:
       - -ceu
       - |
-        mvn -B -ntp -s /workspace/settings.xml clean verify
+        EFFECTIVE_VERSION="$(cat /workspace/effective-version.txt)"
+        mvn -B -ntp -s /workspace/settings.xml -Drevision="${EFFECTIVE_VERSION}" clean verify
 
   - name: maven:3.9.9-eclipse-temurin-21
     id: Publish Release Candidate
@@ -52,7 +60,9 @@ steps:
     args:
       - -ceu
       - |
+        EFFECTIVE_VERSION="$(cat /workspace/effective-version.txt)"
         mvn -B -ntp -s /workspace/settings.xml deploy -DskipTests \
+          -Drevision="${EFFECTIVE_VERSION}" \
           -DaltDeploymentRepository=artifact-registry::default::https://${_REGION}-maven.pkg.dev/${PROJECT_ID}/${_REPO_SUFFIX}
 
   - name: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
@@ -66,7 +76,7 @@ steps:
         echo "Repository: ${_REPO_SUFFIX}"
 
 substitutions:
-  _REPO_SUFFIX: fwmt-maven-release
+  _REPO_SUFFIX: fwmtg-maven-release
   _REGION: europe-west2
 
 options:
