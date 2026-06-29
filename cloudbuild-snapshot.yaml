@@ -24,7 +24,7 @@ steps:
     args:
       - -ceu
       - |
-        BASE_VERSION="$(tr -d '\r\n' < version.txt)"
+        BASE_VERSION="$(mvn -B -ntp help:evaluate -Dexpression=project.version -q -DforceStdout)"
         BASE_VERSION="$(echo "$${BASE_VERSION}" | sed -E 's/-SNAPSHOT$//; s/-rc\.[0-9]+$//')"
 
         BRANCH_SAFE="$(echo "$${BRANCH_NAME:-feature}" | tr '[:upper:]' '[:lower:]' | sed -E 's#[^a-z0-9]+#-#g; s#^-+##; s#-+$##' | cut -c1-20)"
@@ -63,7 +63,7 @@ steps:
         echo "Repository: ${_REPO_SUFFIX}"
 
 substitutions:
-  _REPO_SUFFIX: fwmt-maven-snapshot
+  _REPO_SUFFIX: fwmtg-maven-snapshot
   _REGION: europe-west2
 
 options:
