@@ -106,7 +106,7 @@ steps:
           RC_NUMBER="1"
         fi
 
-        EFFECTIVE_VERSION="$${BASE_VERSION}-rc.$${RC_NUMBER}"
+        EFFECTIVE_VERSION="$${BASE_VERSION}"
         echo "$${EFFECTIVE_VERSION}" > /workspace/effective-version.txt
 
   - name: maven:3.9.16-eclipse-temurin-25
