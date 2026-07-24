@@ -1,5 +1,7 @@
 package uk.gov.ons.census.fwmt.common.data.shared;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -27,9 +29,21 @@ public class Refusal {
   private String middlenames;
 
   @ApiModelProperty(notes = "")
-  private boolean householder;
+  @JsonProperty(required = false)
+  private Boolean householder = false;
 
   @ApiModelProperty(notes = "")
-  private boolean dangerous = false;
+  @JsonProperty(required = false)
+  private Boolean dangerous = false;
+
+  @JsonSetter("householder")
+  public void setHouseholder(Boolean householder) {
+    this.householder = householder != null && householder;
+  }
+
+  @JsonSetter("dangerous")
+  public void setDangerous(Boolean dangerous) {
+    this.dangerous = dangerous != null && dangerous;
+  }
 
 }
