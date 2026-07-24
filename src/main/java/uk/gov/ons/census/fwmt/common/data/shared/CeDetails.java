@@ -1,5 +1,7 @@
 package uk.gov.ons.census.fwmt.common.data.shared;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -25,7 +27,8 @@ public class CeDetails {
   private String establishmentType;
 
   @ApiModelProperty(notes = "Establishment is a secure type")
-  private boolean establishmentSecure;
+  @JsonProperty(required = false)
+  private Boolean establishmentSecure = false;
 
   @ApiModelProperty(notes = "Title of the CE Manager e.g. Mr, Mrs - only used to add to case created in RM,"
       + " hence not needed to be  broken down to title, forename, surname.")
@@ -49,5 +52,10 @@ public class CeDetails {
 
   @ApiModelProperty(notes = "Number of bedspaces")
   private String bedspaces;
+
+  @JsonSetter("establishmentSecure")
+  public void setEstablishmentSecure(Boolean establishmentSecure) {
+    this.establishmentSecure = establishmentSecure != null && establishmentSecure;
+  }
 
 }
