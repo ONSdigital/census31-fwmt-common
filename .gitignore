@@ -38,3 +38,6 @@ classes/*
 out/*
 target/*
 target
+
+# Maven CI-friendly version flattened poms
+.flattened-pom.xml
