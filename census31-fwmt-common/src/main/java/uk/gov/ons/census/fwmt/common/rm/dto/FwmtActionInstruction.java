@@ -1,7 +1,5 @@
 package uk.gov.ons.census.fwmt.common.rm.dto;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
