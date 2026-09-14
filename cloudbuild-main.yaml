@@ -83,28 +83,21 @@ steps:
   - name: maven:3.9.16-eclipse-temurin-25
     id: Compute Main RC Version
     entrypoint: bash
-    env:
-      - BUILD_ID=$BUILD_ID
     args:
       - -ceu
       - |
-        if [[ ! -f version.txt ]]; then
-          echo "ERROR: version.txt not found" >&2
+        if [[ ! -f .mvn/maven.config ]]; then
+          echo "ERROR: .mvn/maven.config not found" >&2
           exit 1
         fi
 
-        BASE_VERSION="$(tr -d '\r\n' < version.txt)"
+        BASE_VERSION="$(sed 's/-Drevision=//' .mvn/maven.config | tr -d '[:space:]')"
         if [[ -z "$${BASE_VERSION}" ]]; then
-          echo "ERROR: version.txt is empty" >&2
+          echo "ERROR: could not read version from .mvn/maven.config" >&2
           exit 1
         fi
 
-        BASE_VERSION="$(echo "$${BASE_VERSION}" | sed -E 's/-SNAPSHOT$//; s/-rc\.[0-9]+$//')"
-
-        RC_NUMBER="$(echo "$${BUILD_ID:-1}" | tr -cd '0-9' | cut -c1-6)"
-        if [[ -z "$${RC_NUMBER}" ]]; then
-          RC_NUMBER="1"
-        fi
+        BASE_VERSION="$(echo "$${BASE_VERSION}" | sed -E 's/-SNAPSHOT$//; s/-RC$//; s/-rc\.[0-9]+$//')"
 
         EFFECTIVE_VERSION="$${BASE_VERSION}"
         echo "$${EFFECTIVE_VERSION}" > /workspace/effective-version.txt
@@ -139,7 +132,23 @@ steps:
         echo "Published : uk.gov.ons.census.fwmt:census31-fwmt-common:$${VERSION}"
         echo "Repository: ${_REPO_SUFFIX}"
 
+  - name: gcr.io/google.com/cloudsdktool/google-cloud-cli:slim
+    id: Trigger Common Version Bump
+    entrypoint: bash
+    args:
+      - -ceu
+      - |
+        echo "Invoking trigger: ${_COMMON_BUMP_TRIGGER}"
+        if ! gcloud builds triggers run "${_COMMON_BUMP_TRIGGER}" \
+          --branch=main \
+          --region="${_REGION}" \
+          --project="${PROJECT_ID}"; then
+          echo "ERROR: failed to invoke common version bump trigger ${_COMMON_BUMP_TRIGGER}" >&2
+          exit 1
+        fi
+
 substitutions:
+  _COMMON_BUMP_TRIGGER: census31-fwmtg-common-bump-version
   _REPO_SUFFIX: fwmtg-maven-release
   _REGION: europe-west2
 
