@@ -6,6 +6,7 @@ public enum SurveyType {
   CE_EST("CE EST"),
   CE_EST_D("CE Est-D"),
   CE_EST_F("CE Est-F"),
+  CE_ESTWU("CE ESTWU"),
   CE_SITE("CE Site"),
   CE_UNIT("CE UNIT"),
   CE_UNIT_D("CE Unit-D"),
