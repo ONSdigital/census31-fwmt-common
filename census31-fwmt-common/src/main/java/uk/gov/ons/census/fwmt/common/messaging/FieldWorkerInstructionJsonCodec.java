@@ -7,8 +7,8 @@ import com.google.pubsub.v1.PubsubMessage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import uk.gov.ons.census.fwmt.common.rm.dto.FwmtActionInstruction;
-import uk.gov.ons.census.fwmt.common.rm.dto.FwmtCancelActionInstruction;
+import uk.gov.ons.census.fwmt.common.rm.dto.ActionInstruction;
+import uk.gov.ons.census.fwmt.common.rm.dto.CancelActionInstruction;
 
 /**
  * JSON codec aligned with job-service {@code Jackson2JsonMessageConverter} type ids for RM/GW field lanes.
@@ -61,11 +61,11 @@ public final class FieldWorkerInstructionJsonCodec {
 
   private static Map<String, Class<?>> fieldWorkerInstructionTypeIds() {
     Map<String, Class<?>> idClassMapping = new HashMap<>();
-    idClassMapping.put("uk.gov.ons.census.fwmtadapter.model.dto.fwmt.FwmtActionInstruction", FwmtActionInstruction.class);
+    idClassMapping.put("uk.gov.ons.census.fwmtadapter.model.dto.fwmt.FwmtActionInstruction", ActionInstruction.class);
     idClassMapping.put("uk.gov.ons.census.fwmtadapter.model.dto.fwmt.FwmtCancelActionInstruction",
-        FwmtCancelActionInstruction.class);
-    idClassMapping.put(FwmtActionInstruction.class.getName(), FwmtActionInstruction.class);
-    idClassMapping.put(FwmtCancelActionInstruction.class.getName(), FwmtCancelActionInstruction.class);
+        CancelActionInstruction.class);
+    idClassMapping.put(ActionInstruction.class.getName(), ActionInstruction.class);
+    idClassMapping.put(CancelActionInstruction.class.getName(), CancelActionInstruction.class);
     return idClassMapping;
   }
 }

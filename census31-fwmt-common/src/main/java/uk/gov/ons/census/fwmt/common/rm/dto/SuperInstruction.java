@@ -7,12 +7,12 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder(toBuilder = true)
 @ToString
-public abstract class FwmtSuperInstruction {
+public abstract class SuperInstruction {
   ActionInstructionType actionInstruction;
   String surveyName;
   String caseId;
 
-  protected FwmtSuperInstruction() {
+  protected SuperInstruction() {
   }
 
   public abstract String toRoutingString();

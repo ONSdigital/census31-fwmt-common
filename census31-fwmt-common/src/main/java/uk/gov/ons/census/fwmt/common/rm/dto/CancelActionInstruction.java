@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
-public class FwmtCancelActionInstruction extends FwmtSuperInstruction implements FwmtCommonInstruction{
+public class CancelActionInstruction extends SuperInstruction implements CommonInstruction{
   private String addressType;
   private String addressLevel;
   private Integer ceExpectedCapacity;
@@ -22,7 +22,7 @@ public class FwmtCancelActionInstruction extends FwmtSuperInstruction implements
 
   // display only the details related to request routing
   public String toRoutingString() {
-    return "FwmtCancelActionInstruction(" +
+    return "CancelActionInstruction(" +
         "actionInstruction=" + this.actionInstruction + ", " +
         "surveyName=" + this.surveyName + ", " +
         "addressType=" + this.addressType + ", " +
