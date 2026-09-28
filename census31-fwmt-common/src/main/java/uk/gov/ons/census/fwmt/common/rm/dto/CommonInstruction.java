@@ -1,6 +1,6 @@
 package uk.gov.ons.census.fwmt.common.rm.dto;
 
-public interface FwmtCommonInstruction {
+public interface CommonInstruction {
   public ActionInstructionType getActionInstruction();
 
   public String getSurveyName();

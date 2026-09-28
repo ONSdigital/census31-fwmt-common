@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -11,16 +12,20 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class FwmtPauseActionInstruction extends FwmtSuperInstruction {
+@ToString(callSuper = true)
+public class CancelActionInstruction extends SuperInstruction implements CommonInstruction{
   private String addressType;
-  private String pauseCode;
+  private String addressLevel;
+  private Integer ceExpectedCapacity;
+  private Integer ceActualResponses;
+  private boolean nc = false;
 
   // display only the details related to request routing
   public String toRoutingString() {
-    return "FwmtCancelActionInstruction(" +
+    return "CancelActionInstruction(" +
         "actionInstruction=" + this.actionInstruction + ", " +
         "surveyName=" + this.surveyName + ", " +
         "addressType=" + this.addressType + ", " +
-        "pauseCode=" + this.pauseCode + ")";
+        "addressLevel=" + this.addressLevel + ")";
   }
 }

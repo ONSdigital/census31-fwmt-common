@@ -18,7 +18,7 @@ import uk.gov.ons.census.fwmt.common.data.tm.SurveyType;
 @SuperBuilder(toBuilder = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ToString(callSuper = true, exclude = {"addressLine1", "addressLine2", "addressLine3", "latitude", "longitude"})
-public class FwmtActionInstruction extends FwmtSuperInstruction implements FwmtCommonInstruction {
+public class ActionInstruction extends SuperInstruction implements CommonInstruction {
   private String addressType;
   private String addressLevel;
   private String caseRef;
