@@ -7,8 +7,8 @@ import com.google.pubsub.v1.PubsubMessage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import uk.gov.ons.census.fwmt.common.rm.dto.ActionInstruction;
-import uk.gov.ons.census.fwmt.common.rm.dto.CancelActionInstruction;
+import uk.gov.ons.census.fwmt.common.dto.rm.ActionInstruction;
+import uk.gov.ons.census.fwmt.common.dto.rm.CancelActionInstruction;
 
 /**
  * JSON codec aligned with job-service {@code Jackson2JsonMessageConverter} type ids for RM/GW field lanes.
