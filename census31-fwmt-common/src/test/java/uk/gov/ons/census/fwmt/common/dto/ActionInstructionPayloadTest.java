@@ -6,9 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
 import org.junit.Test;
-import uk.gov.ons.census.fwmt.common.dto.fwmt.PauseActionInstruction;
 import uk.gov.ons.census.fwmt.common.dto.rm.ActionInstruction;
 import uk.gov.ons.census.fwmt.common.dto.rm.ActionInstructionType;
 
@@ -42,12 +40,14 @@ public class ActionInstructionPayloadTest {
   }
 
   @Test
-  public void fwmtPauseInstructionRoundTripsWithItsExistingNullHandling() throws Exception {
-    Instant pauseFrom = Instant.parse("2026-09-29T12:00:00Z");
-    PauseActionInstruction instruction = PauseActionInstruction.builder()
-        .actionInstruction("PAUSE")
+  public void rmPausePayloadRoundTripsWithRequiredFields() throws Exception {
+    String pauseFrom = "2026-09-29T12:00:00Z";
+    ActionInstruction instruction = ActionInstruction.builder()
+        .actionInstruction(ActionInstructionType.PAUSE)
         .surveyName("CENSUS")
         .caseId("case-456")
+        .addressType("HH")
+        .addressLevel("U")
         .pauseCode("HOLD")
         .pauseFrom(pauseFrom)
         .build();
@@ -56,15 +56,18 @@ public class ActionInstructionPayloadTest {
     JsonNode payload = objectMapper.readTree(json);
 
     assertEquals("PAUSE", payload.get("actionInstruction").asText());
+    assertEquals("CENSUS", payload.get("surveyName").asText());
     assertEquals("case-456", payload.get("caseId").asText());
+    assertEquals("HH", payload.get("addressType").asText());
+    assertEquals("U", payload.get("addressLevel").asText());
     assertEquals("HOLD", payload.get("pauseCode").asText());
-    assertTrue(payload.has("addressLevel"));
-    assertTrue(payload.get("addressLevel").isNull());
+    assertEquals(pauseFrom, payload.get("pauseFrom").asText());
 
-    PauseActionInstruction decoded = objectMapper.readValue(json, PauseActionInstruction.class);
-    assertEquals("PAUSE", decoded.getActionInstruction());
+    ActionInstruction decoded = objectMapper.readValue(json, ActionInstruction.class);
+    assertEquals(ActionInstructionType.PAUSE, decoded.getActionInstruction());
     assertEquals("case-456", decoded.getCaseId());
+    assertEquals("HOLD", decoded.getPauseCode());
     assertEquals(pauseFrom, decoded.getPauseFrom());
-    assertEquals(null, decoded.getAddressLevel());
+    assertTrue(payload.get("pauseFrom").isTextual());
   }
 }
