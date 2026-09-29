@@ -1,4 +1,4 @@
-package uk.gov.ons.census.fwmt.common.rm.dto;
+package uk.gov.ons.census.fwmt.common.dto.rm;
 
 public interface CommonInstruction {
   public ActionInstructionType getActionInstruction();

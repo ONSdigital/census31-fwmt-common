@@ -1,4 +1,4 @@
-package uk.gov.ons.census.fwmt.common.action;
+package uk.gov.ons.census.fwmt.common.dto.fwmt;
 
 import java.time.Instant;
 import lombok.AllArgsConstructor;
