@@ -21,8 +21,8 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <springframework.version>7.0.8</springframework.version>
-    <spring-boot.version>4.0.7</spring-boot.version>
-    <spring-cloud.version>2025.1.1</spring-cloud.version>
+    <spring-boot.version>4.1.1</spring-boot.version>
+    <spring-cloud.version>2025.1.2</spring-cloud.version>
     <spring-cloud-gcp.version>8.0.3</spring-cloud-gcp.version>
     <jakarta-validations.version>4.0.0-M1</jakarta-validations.version>
     <jakarta-annotations.version>3.0.0</jakarta-annotations.version>
